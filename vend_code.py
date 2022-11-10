@@ -98,18 +98,18 @@ while (time.time() < end_time):
             pos = pygame.mouse.get_pos()
             if   rects[0].collidepoint(pos):
                 print("A")
-                print(code[0] + code[1])
+                print(code[0] + code[1]) :
                 if (code[0] == "_") :
                     code[0] = 'A'
-                elif (code[1] == "_")
+                elif (code[1] == "_") :
                     code[1] = 'A'
 
             elif rects[1].collidepoint(pos):
                 print("B")
-                print(code[0] + code[1])
+                print(code[0] + code[1]) :
                 if (code[0] == "_") :
                     code[0] = 'B'
-                elif (code[1] == "_")
+                elif (code[1] == "_") :
                     code[1] = 'B'
 
             elif rects[2].collidepoint(pos):
