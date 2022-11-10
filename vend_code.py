@@ -5,7 +5,7 @@ import time
 import sys
 import os
 import sys
-import csv
+# import csv
 import math
 
 # motor pins
@@ -88,7 +88,7 @@ while (time.time() < end_time):
     screen.fill(white)               # Erase the Work space
     for i in range(len(rects)):
         screen.blit(surface[i], rects[i])
-    screen.draw.text("test", (100, 100), color="black", background="gray")
+    # screen.draw.text("test", (100, 100), color="black", background="gray")
     # Create textpad msg
     num_surface = my_font.render(('sel: ' + letter + ' ' + number), True, black)
     num_rect = num_surface.get_rect(center=(60, 30))
