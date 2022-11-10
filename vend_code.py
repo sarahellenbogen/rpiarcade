@@ -81,15 +81,14 @@ for my_text, text_pos in my_buttons.items():
 state = 0
 code = ["_", "_"]
 
-print(pygame.font.get_fonts())
-
-clock = pygame.time.Clock()
 end_time = time.time() + 30
 while (time.time() < end_time):
+    clock = pygame.time.Clock()
+
     screen.fill(white)               # Erase the Work space
     for i in range(len(rects)):
         screen.blit(surface[i], rects[i])
-    # screen.draw.text("test", (100, 100), color="black", background="gray")
+    screen.draw.text("test", (100, 100), color="black", background="gray")
     # Create textpad msg
     num_surface = my_font.render(('sel: ' + code[0] + ' ' + code[1]), True, black)
     num_rect = num_surface.get_rect(center=(60, 30))
