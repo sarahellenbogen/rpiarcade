@@ -81,6 +81,8 @@ for my_text, text_pos in my_buttons.items():
 state = 0
 code = ["_", "_"]
 
+print(pygame.font.get_fonts())
+
 clock = pygame.time.Clock()
 end_time = time.time() + 30
 while (time.time() < end_time):
