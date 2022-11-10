@@ -58,6 +58,7 @@ pygame.init()
 pygame.mouse.set_visible(False)
 size = 320, 240
 black = 0, 0, 0
+gray = 100, 100, 100
 white = 255, 255, 255
 screen = pygame.display.set_mode(size)
 my_font = pygame.font.Font(None, 40)
@@ -70,7 +71,7 @@ my_buttons = {  'A':( 30,  60),   'B':( 30,  90),   'C':( 30, 120),
 rects = []
 surface = []
 for my_text, text_pos in my_buttons.items():
-    text_surface = my_font.render(my_text, True, "black", "gray")
+    text_surface = my_font.render(my_text, True, black, gray)
     rect = text_surface.get_rect(center=text_pos)
     # rect.inflate(100,100)
     screen.blit(text_surface, rect)
