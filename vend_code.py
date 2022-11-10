@@ -61,7 +61,7 @@ black = 0, 0, 0
 gray = 100, 100, 100
 white = 255, 255, 255
 window = pygame.display.set_mode(size)
-# screen = 
+screen = pygame.Surface((240, 320))
 my_font = pygame.font.Font(None, 40)
 
 # Read for reference: https://pygame-zero.readthedocs.io/en/stable/ptext.html
