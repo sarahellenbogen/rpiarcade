@@ -81,7 +81,7 @@ for my_text, text_pos in my_buttons.items():
 # keeps track of messages
 state = 0
 code = ["_", "_"]
-
+i=0
 clock = pygame.time.Clock()
 end_time = time.time() + 30
 while (time.time() < end_time):
@@ -96,7 +96,8 @@ while (time.time() < end_time):
 
     for event in pygame.event.get():
         if(event.type is MOUSEBUTTONUP):
-            print("up")
+            i+=1
+            print("up" + i)
             pos = pygame.mouse.get_pos()
 
             if   rects[0].collidepoint(pos):
