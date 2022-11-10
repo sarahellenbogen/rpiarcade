@@ -79,8 +79,7 @@ for my_text, text_pos in my_buttons.items():
 
 # keeps track of messages
 state = 0
-letter = '_'
-number = '_'
+code = '__'
 
 clock = pygame.time.Clock()
 end_time = time.time() + 30
@@ -90,7 +89,7 @@ while (time.time() < end_time):
         screen.blit(surface[i], rects[i])
     # screen.draw.text("test", (100, 100), color="black", background="gray")
     # Create textpad msg
-    num_surface = my_font.render(('sel: ' + letter + ' ' + number), True, black)
+    num_surface = my_font.render(('sel: ' + code[0] + ' ' + code[1]), True, black)
     num_rect = num_surface.get_rect(center=(60, 30))
     screen.blit(num_surface, num_rect)
 
@@ -98,30 +97,46 @@ while (time.time() < end_time):
         if(event.type is MOUSEBUTTONUP):
             pos = pygame.mouse.get_pos()
             if   rects[0].collidepoint(pos):
-                letter = 'A'
+                if (code[0] == '_')
+                    code[0] = 'A'
+                elif (code[0] == '_')
+                    code[1] = 'A'
                 print("A")
             elif rects[1].collidepoint(pos):
-                letter = 'B'
+                if (code[0] == '_')
+                    code[0] = 'B'
+                elif (code[0] == '_')
+                    code[1] = 'B'
                 print("B")
             elif rects[2].collidepoint(pos):
-                letter = 'C'
+                if (code[0] == '_')
+                    code[0] = 'C'
+                elif (code[0] == '_')
+                    code[1] = 'C'
                 print("C")
             elif rects[3].collidepoint(pos):
-                number = '1'
+                if (code[0] == '_')
+                    code[0] = '1'
+                elif (code[0] == '_')
+                    code[1] = '1'
                 print("1")
             elif rects[4].collidepoint(pos):
-                number = '2'
+                if (code[0] == '_')
+                    code[0] = '2'
+                elif (code[0] == '_')
+                    code[1] = '2'
                 print("2")
             elif rects[5].collidepoint(pos):
-                number = '3'
+                if (code[0] == '_')
+                    code[0] = '3'
+                elif (code[0] == '_')
+                    code[1] = '3'
                 print("3")
             elif rects[6].collidepoint(pos):
-                number = '_'
-                letter = '_'
+                code = '__'
                 print("CLR")
             elif rects[7].collidepoint(pos):
-                number = '_'
-                letter = '_'
+                code = '__'
                 print("SEL")
             elif rects[8].collidepoint(pos):
                 print("QUIT")
