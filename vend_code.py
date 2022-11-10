@@ -79,7 +79,7 @@ for my_text, text_pos in my_buttons.items():
 
 # keeps track of messages
 state = 0
-code = '__'
+code = ['_', '_']
 
 clock = pygame.time.Clock()
 end_time = time.time() + 30
@@ -97,41 +97,47 @@ while (time.time() < end_time):
         if(event.type is MOUSEBUTTONUP):
             pos = pygame.mouse.get_pos()
             if   rects[0].collidepoint(pos):
+                print("A")
                 if (code[0] == '_') :
                     code[0] = 'A'
                 elif (code[0] == '_') :
                     code[1] = 'A'
-                print("A")
+
             elif rects[1].collidepoint(pos):
+                print("B")
                 if (code[0] == '_') :
                     code[0] = 'B'
                 elif (code[0] == '_') :
                     code[1] = 'B'
-                print("B")
+
             elif rects[2].collidepoint(pos):
+                print("C")
                 if (code[0] == '_') :
                     code[0] = 'C'
                 elif (code[0] == '_') :
                     code[1] = 'C'
-                print("C")
+
             elif rects[3].collidepoint(pos):
+                print("1")
                 if (code[0] == '_') :
                     code[0] = '1'
                 elif (code[0] == '_') :
                     code[1] = '1'
-                print("1")
+
             elif rects[4].collidepoint(pos):
+                print("2")
                 if (code[0] == '_') :
                     code[0] = '2'
                 elif (code[0] == '_') :
                     code[1] = '2'
-                print("2")
+
             elif rects[5].collidepoint(pos):
+                print("3")
                 if (code[0] == '_') :
                     code[0] = '3'
                 elif (code[0] == '_') :
                     code[1] = '3'
-                print("3")
+
             elif rects[6].collidepoint(pos):
                 code = '__'
                 print("CLR")
