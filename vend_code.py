@@ -60,7 +60,7 @@ size = 320, 240
 black = 0, 0, 0
 white = 255, 255, 255
 screen = pygame.display.set_mode(size)
-my_font = pygame.font.Font(None, 25)
+my_font = pygame.font.Font(None, 40)
 
 # Read for reference: https://pygame-zero.readthedocs.io/en/stable/ptext.html
 # create buttons
