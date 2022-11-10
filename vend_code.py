@@ -117,39 +117,39 @@ while (time.time() < end_time):
                 print("C")
                 print(code[0] + code[1])
                 if (code[0] == "_") :
-                    code[0] = 'C'
+                    code[0] = "C"
                 elif (code[1] == "_") :
-                    code[1] = 'C'
+                    code[1] = "C"
 
             elif rects[3].collidepoint(pos):
                 print("1")
                 print(code[0] + code[1])
                 if (code[0] == "_") :
-                    code[0] = '1'
+                    code[0] = "1"
                 elif (code[1] == "_") :
-                    code[1] = '1'
+                    code[1] = "1"
 
             elif rects[4].collidepoint(pos):
                 print("2")
                 print(code[0] + code[1])
                 if (code[0] == "_") :
-                    code[0] = '2'
+                    code[0] = "2"
                 elif (code[1] == "_") :
-                    code[1] = '2'
+                    code[1] = "2"
 
             elif rects[5].collidepoint(pos):
                 print("3")
                 print(code[0] + code[1])
                 if (code[0] == "_") :
-                    code[0] = '3'
+                    code[0] = "3"
                 elif (code[1] == "_") :
-                    code[1] = '3'
+                    code[1] = "3"
 
             elif rects[6].collidepoint(pos):
-                code = '__'
+                code = ["_", "_"]
                 print("CLR")
             elif rects[7].collidepoint(pos):
-                code = '__'
+                code = ["_", "_"]
                 print("SEL")
             elif rects[8].collidepoint(pos):
                 print("QUIT")
