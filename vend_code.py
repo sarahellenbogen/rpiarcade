@@ -98,6 +98,7 @@ while (time.time() < end_time):
         if(event.type is MOUSEBUTTONUP):
             pos = pygame.mouse.get_pos()
             print(pos)
+            pos = pos[::-1]
             if   rects[0].collidepoint(pos):
                 print("A")
                 print(code[0] + code[1])
