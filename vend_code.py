@@ -50,8 +50,8 @@ os.putenv('SDL_MOUSEDEV', '/dev/input/touchscreen')
 def GPIO17_callback(channel):
     GPIO.cleanup()
     sys.exit()
-GPIO.setup(17, GPIO.IN, pull_up_down = GPIO.PUD_UP)
-GPIO.add_event_detect(17, GPIO.FALLING, callback=GPIO17_callback, bouncetime=100) 
+# GPIO.setup(17, GPIO.IN, pull_up_down = GPIO.PUD_UP)
+# GPIO.add_event_detect(17, GPIO.FALLING, callback=GPIO17_callback, bouncetime=100) 
 
 
 pygame.init()
