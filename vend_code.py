@@ -14,13 +14,13 @@ DIRA2 = 13
 DIRB1 = 21
 DIRB2 = 20
 
-GPIO.setmode(GPIO.BCM)
+# GPIO.setmode(GPIO.BCM)
 
 # Setup motor pins
-GPIO.setup(DIRA1, GPIO.OUT) # DIRA1
-GPIO.setup(DIRA2, GPIO.OUT) # DIRA2
-GPIO.setup(DIRB1, GPIO.OUT) # DIRB1
-GPIO.setup(DIRB2, GPIO.OUT) # DIRB2
+# GPIO.setup(DIRA1, GPIO.OUT) # DIRA1
+# GPIO.setup(DIRA2, GPIO.OUT) # DIRA2
+# GPIO.setup(DIRB1, GPIO.OUT) # DIRB1
+# GPIO.setup(DIRB2, GPIO.OUT) # DIRB2
 
 def A_stop():   # A stop
     GPIO.output(DIRA1, GPIO.LOW)
