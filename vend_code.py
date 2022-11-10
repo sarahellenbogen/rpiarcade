@@ -56,12 +56,11 @@ def GPIO17_callback(channel):
 
 pygame.init()
 pygame.mouse.set_visible(False)
-size = 320, 240
+size = 240, 320
 black = 0, 0, 0
 gray = 100, 100, 100
 white = 255, 255, 255
 screen = pygame.display.set_mode(size)
-# screen = pygame.Surface((240, 320))
 my_font = pygame.font.Font(None, 40)
 
 # Read for reference: https://pygame-zero.readthedocs.io/en/stable/ptext.html
@@ -160,7 +159,6 @@ while (time.time() < end_time):
     
     # Render
     clock.tick(30)
-    screen.blit(pygame.transform.rotate(screen, 90), (0, 0))
     pygame.display.flip()
 
 # Close program
