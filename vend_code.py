@@ -72,7 +72,7 @@ surface = []
 for my_text, text_pos in my_buttons.items():
     text_surface = my_font.render(my_text, True, black)
     rect = text_surface.get_rect(center=text_pos)
-    rect.inflate(100,100)
+    # rect.inflate(100,100)
     screen.blit(text_surface, rect)
     surface.append(text_surface)
     rects.append(rect)
@@ -101,7 +101,7 @@ while (time.time() < end_time):
                 print(code[0] + code[1])
                 if (code[0] == "_") :
                     code[0] = 'A'
-                elif (code[1] == "_") :
+                elif (code[1] == "_")
                     code[1] = 'A'
 
             elif rects[1].collidepoint(pos):
@@ -109,7 +109,7 @@ while (time.time() < end_time):
                 print(code[0] + code[1])
                 if (code[0] == "_") :
                     code[0] = 'B'
-                elif (code[1] == "_") :
+                elif (code[1] == "_")
                     code[1] = 'B'
 
             elif rects[2].collidepoint(pos):
