@@ -65,13 +65,13 @@ my_font = pygame.font.Font(None, 40)
 
 # Read for reference: https://pygame-zero.readthedocs.io/en/stable/ptext.html
 # create buttons
-my_buttons = {  'A':( 30,  60),   'B':( 30,  90),   'C':( 30, 120),
-                '1':( 60,  60),   '2':( 60,  90),   '3':( 60, 120),
-              'CLR':(120,  60), 'SEL':(120,  90),'QUIT':(120, 120)}
+my_buttons = {  'A':( 30,  60),   'B':( 30, 100),   'C':( 30, 140),
+                '1':( 60,  60),   '2':( 60, 100),   '3':( 60, 140),
+              'CLR':(120,  60), 'SEL':(120, 100),'QUIT':(120, 140)}
 rects = []
 surface = []
 for my_text, text_pos in my_buttons.items():
-    text_surface = my_font.render(my_text, True, black, gray)
+    text_surface = my_font.render(my_text, False, black)
     rect = text_surface.get_rect(center=text_pos)
     # rect.inflate(100,100)
     screen.blit(text_surface, rect)
