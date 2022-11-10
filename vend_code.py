@@ -97,39 +97,39 @@ while (time.time() < end_time):
         if(event.type is MOUSEBUTTONUP):
             pos = pygame.mouse.get_pos()
             if   rects[0].collidepoint(pos):
-                if (code[0] == '_')
+                if (code[0] == '_') :
                     code[0] = 'A'
-                elif (code[0] == '_')
+                elif (code[0] == '_') :
                     code[1] = 'A'
                 print("A")
             elif rects[1].collidepoint(pos):
-                if (code[0] == '_')
+                if (code[0] == '_') :
                     code[0] = 'B'
-                elif (code[0] == '_')
+                elif (code[0] == '_') :
                     code[1] = 'B'
                 print("B")
             elif rects[2].collidepoint(pos):
-                if (code[0] == '_')
+                if (code[0] == '_') :
                     code[0] = 'C'
-                elif (code[0] == '_')
+                elif (code[0] == '_') :
                     code[1] = 'C'
                 print("C")
             elif rects[3].collidepoint(pos):
-                if (code[0] == '_')
+                if (code[0] == '_') :
                     code[0] = '1'
-                elif (code[0] == '_')
+                elif (code[0] == '_') :
                     code[1] = '1'
                 print("1")
             elif rects[4].collidepoint(pos):
-                if (code[0] == '_')
+                if (code[0] == '_') :
                     code[0] = '2'
-                elif (code[0] == '_')
+                elif (code[0] == '_') :
                     code[1] = '2'
                 print("2")
             elif rects[5].collidepoint(pos):
-                if (code[0] == '_')
+                if (code[0] == '_') :
                     code[0] = '3'
-                elif (code[0] == '_')
+                elif (code[0] == '_') :
                     code[1] = '3'
                 print("3")
             elif rects[6].collidepoint(pos):
