@@ -160,7 +160,7 @@ while (time.time() < end_time):
     
     # Render
     clock.tick(30)
-    screen.blit(pygame.transform.rotate(screen, 90), (0, 0))
+    screen.blit(pygame.transform.rotate(screen, 90), (160, 120))
     pygame.display.flip()
 
 # Close program
