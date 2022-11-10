@@ -60,8 +60,8 @@ size = 320, 240
 black = 0, 0, 0
 gray = 100, 100, 100
 white = 255, 255, 255
-window = pygame.display.set_mode(size)
-screen = pygame.Surface((240, 320))
+screen = pygame.display.set_mode(size)
+# screen = pygame.Surface((240, 320))
 my_font = pygame.font.Font(None, 40)
 
 # Read for reference: https://pygame-zero.readthedocs.io/en/stable/ptext.html
@@ -90,7 +90,6 @@ while (time.time() < end_time):
     screen.fill(white)               # Erase the Work space
     for i in range(len(rects)):
         screen.blit(surface[i], rects[i])
-    # screen.draw.text("test", (100, 100), color="black", background="gray")
     # Create textpad msg
     num_surface = my_font.render(('sel: ' + code[0] + ' ' + code[1]), True, black)
     num_rect = num_surface.get_rect(center=(60, 170))
@@ -161,7 +160,7 @@ while (time.time() < end_time):
     
     # Render
     clock.tick(30)
-    window.blit(pygame.transform.rotate(screen, 90), (0, 0))
+    screen.blit(pygame.transform.rotate(screen, 90), (0, 0))
     pygame.display.flip()
 
 # Close program
