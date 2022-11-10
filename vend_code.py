@@ -60,7 +60,8 @@ size = 320, 240
 black = 0, 0, 0
 gray = 100, 100, 100
 white = 255, 255, 255
-screen = pygame.display.set_mode(size)
+window = pygame.display.set_mode(size)
+# screen = 
 my_font = pygame.font.Font(None, 40)
 
 # Read for reference: https://pygame-zero.readthedocs.io/en/stable/ptext.html
@@ -160,7 +161,7 @@ while (time.time() < end_time):
     
     # Render
     clock.tick(30)
-    screen.blit(pygame.transform.rotate(screen, 90), (0, 0))
+    window.blit(pygame.transform.rotate(screen, 90), (0, 0))
     pygame.display.flip()
 
 # Close program
