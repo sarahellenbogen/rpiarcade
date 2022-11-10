@@ -101,7 +101,7 @@ while (time.time() < end_time):
                 print(code[0] + code[1])
                 if (code[0] == "_") :
                     code[0] = 'A'
-                elif (code[0] == "_") :
+                elif (code[1] == "_") :
                     code[1] = 'A'
 
             elif rects[1].collidepoint(pos):
@@ -109,7 +109,7 @@ while (time.time() < end_time):
                 print(code[0] + code[1])
                 if (code[0] == "_") :
                     code[0] = 'B'
-                elif (code[0] == "_") :
+                elif (code[1] == "_") :
                     code[1] = 'B'
 
             elif rects[2].collidepoint(pos):
@@ -117,7 +117,7 @@ while (time.time() < end_time):
                 print(code[0] + code[1])
                 if (code[0] == "_") :
                     code[0] = 'C'
-                elif (code[0] == "_") :
+                elif (code[1] == "_") :
                     code[1] = 'C'
 
             elif rects[3].collidepoint(pos):
@@ -125,7 +125,7 @@ while (time.time() < end_time):
                 print(code[0] + code[1])
                 if (code[0] == "_") :
                     code[0] = '1'
-                elif (code[0] == "_") :
+                elif (code[1] == "_") :
                     code[1] = '1'
 
             elif rects[4].collidepoint(pos):
@@ -133,7 +133,7 @@ while (time.time() < end_time):
                 print(code[0] + code[1])
                 if (code[0] == "_") :
                     code[0] = '2'
-                elif (code[0] == "_") :
+                elif (code[1] == "_") :
                     code[1] = '2'
 
             elif rects[5].collidepoint(pos):
@@ -141,7 +141,7 @@ while (time.time() < end_time):
                 print(code[0] + code[1])
                 if (code[0] == "_") :
                     code[0] = '3'
-                elif (code[0] == "_") :
+                elif (code[1] == "_") :
                     code[1] = '3'
 
             elif rects[6].collidepoint(pos):
