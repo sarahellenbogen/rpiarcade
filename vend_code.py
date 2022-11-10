@@ -66,9 +66,9 @@ my_font = pygame.font.Font(None, 40)
 
 # Read for reference: https://pygame-zero.readthedocs.io/en/stable/ptext.html
 # create buttons
-my_buttons = {  'A':( 30,  60),   'B':( 30, 100),   'C':( 30, 140),
-                '1':( 60,  60),   '2':( 60, 100),   '3':( 60, 140),
-              'CLR':(120,  60), 'SEL':(120, 100),'QUIT':(120, 140)}
+my_buttons = {  'A':( 30,  160),   'B':( 30, 200),   'C':( 30, 240),
+                '1':( 60,  160),   '2':( 60, 200),   '3':( 60, 240),
+              'CLR':(120,  160), 'SEL':(120, 200),'QUIT':(120, 240)}
 rects = []
 surface = []
 for my_text, text_pos in my_buttons.items():
@@ -93,7 +93,7 @@ while (time.time() < end_time):
     # screen.draw.text("test", (100, 100), color="black", background="gray")
     # Create textpad msg
     num_surface = my_font.render(('sel: ' + code[0] + ' ' + code[1]), True, black)
-    num_rect = num_surface.get_rect(center=(60, 30))
+    num_rect = num_surface.get_rect(center=(60, 130))
     screen.blit(num_surface, num_rect)
 
     for event in pygame.event.get():
