@@ -79,7 +79,7 @@ for my_text, text_pos in my_buttons.items():
 
 # keeps track of messages
 state = 0
-code = ['_', '_']
+code = ["_", "_"]
 
 clock = pygame.time.Clock()
 end_time = time.time() + 30
@@ -99,49 +99,49 @@ while (time.time() < end_time):
             if   rects[0].collidepoint(pos):
                 print("A")
                 print(code[0] + code[1])
-                if (code[0] == '_') :
+                if (code[0] == "_") :
                     code[0] = 'A'
-                elif (code[0] == '_') :
+                elif (code[0] == "_") :
                     code[1] = 'A'
 
             elif rects[1].collidepoint(pos):
                 print("B")
                 print(code[0] + code[1])
-                if (code[0] == '_') :
+                if (code[0] == "_") :
                     code[0] = 'B'
-                elif (code[0] == '_') :
+                elif (code[0] == "_") :
                     code[1] = 'B'
 
             elif rects[2].collidepoint(pos):
                 print("C")
                 print(code[0] + code[1])
-                if (code[0] == '_') :
+                if (code[0] == "_") :
                     code[0] = 'C'
-                elif (code[0] == '_') :
+                elif (code[0] == "_") :
                     code[1] = 'C'
 
             elif rects[3].collidepoint(pos):
                 print("1")
                 print(code[0] + code[1])
-                if (code[0] == '_') :
+                if (code[0] == "_") :
                     code[0] = '1'
-                elif (code[0] == '_') :
+                elif (code[0] == "_") :
                     code[1] = '1'
 
             elif rects[4].collidepoint(pos):
                 print("2")
                 print(code[0] + code[1])
-                if (code[0] == '_') :
+                if (code[0] == "_") :
                     code[0] = '2'
-                elif (code[0] == '_') :
+                elif (code[0] == "_") :
                     code[1] = '2'
 
             elif rects[5].collidepoint(pos):
                 print("3")
                 print(code[0] + code[1])
-                if (code[0] == '_') :
+                if (code[0] == "_") :
                     code[0] = '3'
-                elif (code[0] == '_') :
+                elif (code[0] == "_") :
                     code[1] = '3'
 
             elif rects[6].collidepoint(pos):
