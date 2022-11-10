@@ -56,7 +56,7 @@ def GPIO17_callback(channel):
 
 pygame.init()
 pygame.mouse.set_visible(False)
-size = 240, 320#, 240
+size = 320, 240
 black = 0, 0, 0
 gray = 100, 100, 100
 white = 255, 255, 255
