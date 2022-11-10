@@ -56,7 +56,7 @@ def GPIO17_callback(channel):
 
 pygame.init()
 pygame.mouse.set_visible(False)
-size = 320, 240
+size = 240, 320#, 240
 black = 0, 0, 0
 gray = 100, 100, 100
 white = 255, 255, 255
@@ -82,9 +82,9 @@ for my_text, text_pos in my_buttons.items():
 state = 0
 code = ["_", "_"]
 
+clock = pygame.time.Clock()
 end_time = time.time() + 30
 while (time.time() < end_time):
-    clock = pygame.time.Clock()
 
     screen.fill(white)               # Erase the Work space
     for i in range(len(rects)):
@@ -160,6 +160,7 @@ while (time.time() < end_time):
     
     # Render
     clock.tick(30)
+    screen.blit(pygame.transform.rotate(screen, 90), (0, 0))
     pygame.display.flip()
 
 # Close program
