@@ -70,7 +70,7 @@ my_buttons = {  'A':( 30,  60),   'B':( 30,  90),   'C':( 30, 120),
 rects = []
 surface = []
 for my_text, text_pos in my_buttons.items():
-    text_surface = my_font.render(my_text, True, black)
+    text_surface = my_font.render(my_text, True, "black", "gray")
     rect = text_surface.get_rect(center=text_pos)
     # rect.inflate(100,100)
     screen.blit(text_surface, rect)
@@ -88,9 +88,9 @@ while (time.time() < end_time):
     screen.fill(white)               # Erase the Work space
     for i in range(len(rects)):
         screen.blit(surface[i], rects[i])
-    screen.draw.text("test", (100, 100), color="black", background="gray")
+    # screen.draw.text("test", (100, 100), color="black", background="gray")
     # Create textpad msg
-    num_surface = my_font.render(('sel: ' + code[0] + ' ' + code[1]), True, black)
+    # num_surface = my_font.render(('sel: ' + code[0] + ' ' + code[1]), True, black)
     num_rect = num_surface.get_rect(center=(60, 30))
     screen.blit(num_surface, num_rect)
 
