@@ -91,7 +91,7 @@ while (time.time() < end_time):
         screen.blit(surface[i], rects[i])
     # screen.draw.text("test", (100, 100), color="black", background="gray")
     # Create textpad msg
-    # num_surface = my_font.render(('sel: ' + code[0] + ' ' + code[1]), True, black)
+    num_surface = my_font.render(('sel: ' + code[0] + ' ' + code[1]), True, black)
     num_rect = num_surface.get_rect(center=(60, 30))
     screen.blit(num_surface, num_rect)
 
