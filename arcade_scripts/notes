@@ -1,0 +1,9 @@
+when sshed run "export DISPLAY=:0"
+
+start with mame pacman -console -nodebug -skip_gameinfo
+
+cpu = manager.machine.devices[":maincpu"]
+
+mem = cpu.spaces["program"]
+
+print(mem:read_i8(0x4e14))
