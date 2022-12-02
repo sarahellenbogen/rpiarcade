@@ -4,9 +4,26 @@ import subprocess
 import shlex
 from time import sleep
 
-def display(r):
+def display(r, char):
     global process
-    print(process.stdout.read1().decode("utf-8"), end=r, flush=True)
+    buffer = process.stdout.read1(-1)
+    print(buffer.decode("utf-8"), end="", flush=True)
+    return buffer.decode("utf-8")
+
+def search_for_output(string):
+    buffer = ""
+    while not (string in buffer):
+        print("buffer: " + buffer, end="")
+        buffer = buffer + display("", 1)
+    print("hello\n")
+
+def run(command):
+    process.stdin.write(command)
+    process.stdin.flush()
+    display("\n", -1)
+
+
+alive = False
 
 with subprocess.Popen(
     shlex.split("mame pacman -console -nodebug -skip_gameinfo"),
@@ -14,20 +31,14 @@ with subprocess.Popen(
     stdout=subprocess.PIPE,
 ) as process:
     sleep(1)
-    display("\n")
+    display("\n", -1)
+    sleep(15)
+    run(b"cpu = manager.machine.devices[':maincpu'] \n")
+    run(b"mem = cpu.spaces['program'] \n")
+    display("\n", -1)
 
-    process.stdin.write(b"cpu = manager.machine.devices[':maincpu'] \n")
-    process.stdin.flush()
-    display("\n")
-
-    process.stdin.write(b"mem = cpu.spaces['program'] \n")
-    process.stdin.flush()
-    display("\n")
-
-    sleep(20)
     while(True):
-        process.stdin.write(b"print(mem:read_i8(0x4e14)) \n")
-        process.stdin.flush()
-        # print(process.stdout.read1().decode("utf-8"), end="", flush=True)
-        display("")
+        run(b"print(mem:read_i8(0x4e14)) \n")
+
+        search_for_output("[MAME]>")
         sleep(1)
