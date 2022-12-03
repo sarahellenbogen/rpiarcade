@@ -1,4 +1,4 @@
-when sshed run "export DISPLAY=:0"
+when sshed run: export DISPLAY=:0
 
 start with mame pacman -console -nodebug -skip_gameinfo
 
