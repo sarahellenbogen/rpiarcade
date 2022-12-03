@@ -8,6 +8,29 @@ import os
 import sys
 # import csv
 import math
+import board
+import busio
+
+# Additional import needed for I2C/SPI
+from digitalio import DigitalInOut
+#
+# NOTE: pick the import that matches the interface being used
+#
+from adafruit_pn532.adafruit_pn532 import MIFARE_CMD_AUTH_B
+#from adafruit_pn532.i2c import PN532_I2C
+
+from adafruit_pn532.spi import PN532_SPI
+# from adafruit_pn532.uart import PN532_UART
+
+# SPI connection:
+spi = busio.SPI(board.SCK_1, MOSI = board.MOSI_1, MISO =  board.MISO_1)
+cs_pin = DigitalInOut(board.D16)
+pn532 = PN532_SPI(spi, cs_pin, debug=False)
+
+# Configure PN532 to communicate with MiFare cards
+pn532.SAM_configuration()
+
+key = b"\xFF\xFF\xFF\xFF\xFF\xFF"
 
 # motor pins
 DIRA1 = 19
@@ -119,25 +142,52 @@ while (time.time() < end_time):
         ticketStr = "No card scanned"
         popUp = " "
         canSelect = 1
+        uid = None
         #RFID read here if read tickets == read
+        # Check if a card is available to read
+        uid = pn532.read_passive_target(timeout=1)
+        if uid is not None:
+            authenticated = pn532.mifare_classic_authenticate_block(uid, 4, MIFARE_CMD_AUTH_B, key)
+            tickets = int.from_bytes(pn532.mifare_classic_read_block(4), "big")
+            state = 1
 
     elif state == 1:
         popUp = " "
-
+        ticketStr = "You have " + str(tickets) + " tickets"
+        canSelect = 1
 
     elif state == 2:
         popUp = "SCAN CARD"
         canSelect = 0
         if (time.time() >= state2start + 5):
-            state = 0 
+            state = 0
+        uid = pn532.read_passive_target(timeout=1)
+        if uid is not None:
+            authenticated = pn532.mifare_classic_authenticate_block(uid, 4, MIFARE_CMD_AUTH_B, key)
+            vend_tickets = int.from_bytes(pn532.mifare_classic_read_block(4), "big")
+            new_val = vend_tickets - 10
+            if new_val >= 0:
+                data = new_val.to_bytes(16, 'big')
+                pn532.mifare_classic_write_block(4, data)
+                ticketStr = "You now have " + str(new_val) + " tickets"
+                state = 4
+                state3start = time.time() 
+            else:
+                state = 3
+                state3start = time.time()
 
     elif state == 3:
         popUp = " "
         canSelect = 0
+        message = "Too few tickets"
+        if (time.time() >= state3start + 3):
+            state = 0
 
     elif state == 4:
         popUp = "VENDING"
         canSelect = 0
+        if (time.time() >= state3start + 5):
+            state = 0
 
     if canSelect == 1:
 
