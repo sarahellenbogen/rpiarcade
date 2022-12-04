@@ -55,4 +55,4 @@ data = value.to_bytes(16, 'big')
 pn532.mifare_classic_write_block(4, data)
 
 array = int.from_bytes(pn532.mifare_classic_read_block(4), "big")
-print("read data:" + hex(array))
+print("read data:" + str(array))
