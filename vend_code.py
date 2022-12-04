@@ -33,38 +33,52 @@ pn532.SAM_configuration()
 key = b"\xFF\xFF\xFF\xFF\xFF\xFF"
 
 # motor pins
-DIRA1 = 19
-DIRA2 = 13
-DIRB1 = 21
-DIRB2 = 20
+DIRA1 = 26
+DIRB1 = 13
+DIRA2 = 6
+DIRB2 = 5
+PWM = 12
 
 GPIO.setmode(GPIO.BCM)
 
 # Setup motor pins
-# GPIO.setup(DIRA1, GPIO.OUT) # DIRA1
-# GPIO.setup(DIRA2, GPIO.OUT) # DIRA2
-# GPIO.setup(DIRB1, GPIO.OUT) # DIRB1
-# GPIO.setup(DIRB2, GPIO.OUT) # DIRB2
+GPIO.setup(DIRA1, GPIO.OUT) # DIRA1
+GPIO.setup(DIRB1, GPIO.OUT) # DIRA2
+GPIO.setup(DIRA2, GPIO.OUT) # DIRB1
+GPIO.setup(DIRB2, GPIO.OUT) # DIRB2
+GPIO.setup(PWM,  GPIO.OUT) # PWMA
+PWM = GPIO.PWM(PWM, 100)
 
-def A_stop():   # A stop
+def A1_stop():   # Item A1 stop
     GPIO.output(DIRA1, GPIO.LOW)
-    GPIO.output(DIRA2, GPIO.LOW)
-def B_stop():   # A stop
-    GPIO.output(DIRA1, GPIO.LOW)
-    GPIO.output(DIRB2, GPIO.LOW)
-def A1(pwr):   # A forward
-    GPIO.output(DIRA1, GPIO.LOW)
-    GPIO.output(DIRA2, GPIO.HIGH)
-def B1(pwr):   # B forward
+    PWM.start(0)
+def B1_stop():   # Item B1 stop
     GPIO.output(DIRB1, GPIO.LOW)
-    GPIO.output(DIRB2, GPIO.HIGH)
-def A2(pwr):   # A back
-    GPIO.output(DIRA1, GPIO.HIGH)
+    PWM.start(0)
+def A2_stop():   # Item A2 Stop
     GPIO.output(DIRA2, GPIO.LOW)
-def B2(pwr):   # B back
-    GPIO.output(DIRB2, GPIO.HIGH)
+    PWM.start(0)
+def B2_stop():   # Item B2 Stop
     GPIO.output(DIRB2, GPIO.LOW)
-
+    PWM.start(0)
+def stopAll():
+    A1_stop()
+    A2_stop()
+    B1_stop()
+    B2_stop()
+def A1(pwr):   # A1 Dispense
+    GPIO.output(DIRA1, GPIO.HIGH)
+    PWM.start(pwr)
+def B1(pwr):   # B1 Dispense
+    GPIO.output(DIRB1, GPIO.HIGH)
+    PWM.start(pwr)
+def A2(pwr):   # A2 Dispense
+    GPIO.output(DIRA2, GPIO.HIGH)
+    PWM.start(pwr)
+def B2(pwr):   # B2 Dispense
+    GPIO.output(DIRB2, GPIO.HIGH)
+    PWM.start(pwr)
+ 
 os.putenv('SDL_VIDEODRIVER', 'fbcon') # Display on piTFT 
 os.putenv('SDL_FBDEV', '/dev/fb1') #
 os.putenv('SDL_MOUSEDRV', 'TSLIB') # Track mouse clicks on piTFT 
@@ -112,6 +126,8 @@ tickets = 0
 message = "Scan card or pick item"
 ticketStr = "No card scanned"
 popUp = " "
+item = 0
+cost = [10,10,10,10]
 canSelect = 1
 clock = pygame.time.Clock()
 end_time = time.time() + 120
@@ -141,6 +157,8 @@ while (time.time() < end_time):
         message = "Scan card or pick item"
         ticketStr = "No card scanned"
         popUp = " "
+        stopAll()
+        item = 0
         canSelect = 1
         uid = None
         #RFID read here if read tickets == read
@@ -150,11 +168,21 @@ while (time.time() < end_time):
             authenticated = pn532.mifare_classic_authenticate_block(uid, 4, MIFARE_CMD_AUTH_B, key)
             tickets = int.from_bytes(pn532.mifare_classic_read_block(4), "big")
             state = 1
+            state1start = time.time()
 
     elif state == 1:
         popUp = " "
         ticketStr = "You have " + str(tickets) + " tickets"
         canSelect = 1
+        if time.time() > (state1start + 5):
+            uid = pn532.read_passive_target(timeout=1)
+            if uid is not None:
+                authenticated = pn532.mifare_classic_authenticate_block(uid, 4, MIFARE_CMD_AUTH_B, key)
+                tickets = int.from_bytes(pn532.mifare_classic_read_block(4), "big")
+                state = 1
+                state1start = time.time()
+        if (time.time() >= state1start + 20):
+            state = 0
 
     elif state == 2:
         popUp = "SCAN CARD"
@@ -165,7 +193,7 @@ while (time.time() < end_time):
         if uid is not None:
             authenticated = pn532.mifare_classic_authenticate_block(uid, 4, MIFARE_CMD_AUTH_B, key)
             vend_tickets = int.from_bytes(pn532.mifare_classic_read_block(4), "big")
-            new_val = vend_tickets - 10
+            new_val = vend_tickets - cost[item-1]
             if new_val >= 0:
                 data = new_val.to_bytes(16, 'big')
                 pn532.mifare_classic_write_block(4, data)
@@ -188,6 +216,14 @@ while (time.time() < end_time):
         canSelect = 0
         if (time.time() >= state3start + 5):
             state = 0
+        if item == 1:
+            A1(50)
+        elif item == 2:
+            A2(50)
+        elif item == 3:
+            B1(50)
+        elif item == 4:
+            B2(50)
 
     if canSelect == 1:
 
@@ -238,17 +274,21 @@ while (time.time() < end_time):
                         if code[1] == "1":
                             message = "This prize is 10 tickets"
                             state = 2
+                            item = 1
                         if code[1] == "2":
                             message = "This prize is 10 tickets"
                             state = 2
+                            item = 2
 
                     if code[0] == "B":
                         if code[1] == "1":
                             message = "This prize is 10 tickets"
                             state = 2
+                            item = 3
                         if code[1] == "2":
                             message = "This prize is 10 tickets"
                             state == 2
+                            item = 4
 
                     if state != 2:
                         state = 0
