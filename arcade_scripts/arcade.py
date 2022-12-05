@@ -129,7 +129,7 @@ def death():
 
 alive = False
 with subprocess.Popen(
-    shlex.split("mame pacman -console -nodebug -skip_gameinfo"),
+    shlex.split("mame -console -nodebug -skip_gameinfo"),
     stdin=subprocess.PIPE,
     stdout=subprocess.PIPE,
 ) as process:
