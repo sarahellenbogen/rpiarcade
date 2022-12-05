@@ -47,50 +47,33 @@ def run(command, resp):
         return int(string.split('\n')[0])
 
 def death():
-    global game
-    
     run("emu.pause()", False)
     
     score = 0
 
-    if game == PACMAN:
-        temp = run("print(mem:read_i8(0xee83))", True)
-        score *= 100
-        score += (temp >> 4) * 10
-        score += temp & 0xF
-        temp = run("print(mem:read_i8(0xee82))", True)
-        score *= 100
-        score += (temp >> 4) * 10
-        score += temp & 0xF
-        sleep(0.16)
-        score *= 100
-        temp = run("print(mem:read_i8(0xee81))", True)
-        score += (temp >> 4) * 10
-        score += temp & 0xF
-        sleep(0.16)
-        score *= 100
-        temp = run("print(mem:read_i8(0xee80))", True)
-        score += (temp >> 4) * 10
-        score += temp & 0xF
+    temp = run("print(mem:read_i8(0xee83))", True)
+    score *= 100
+    score += (temp >> 4) * 10
+    score += temp & 0xF
 
-    if game == SPACE:
-        temp = run("print(mem:read_i8(0x20f8))", True)
-        score *= 100
-        score += (temp >> 4) * 10
-        score += temp & 0xF
-        sleep(0.16)
-        score *= 100
-        temp = run("print(mem:read_i8(0x20f7))", True)
-        score += (temp >> 4) * 10
-        score += temp & 0xF
-        sleep(0.16)
-        score *= 100
-        temp = run("print(mem:read_i8(0x20f6))", True)
-        score += (temp >> 4) * 10
-        score += temp & 0xF
+    temp = run("print(mem:read_i8(0xee82))", True)
+    score *= 100
+    score += (temp >> 4) * 10
+    score += temp & 0xF
 
+    sleep(0.16)
+    score *= 100
+    temp = run("print(mem:read_i8(0xee81))", True)
+    score += (temp >> 4) * 10
+    score += temp & 0xF
 
-    print("score: " + str(score))
+    sleep(0.16)
+    score *= 100
+    temp = run("print(mem:read_i8(0xee80))", True)
+    score += (temp >> 4) * 10
+    score += temp & 0xF
+
+    # print("score: " + str(score))
 
     key = b"\xFF\xFF\xFF\xFF\xFF\xFF"
     uid = None
@@ -151,20 +134,12 @@ with subprocess.Popen(
         else:
             game = NOTHING
         
-        if game == PACMAN:
-            lives = run("print(mem:read_i8(0x4e14))", True)
-            if lives == 3:
-                alive = True
-            if lives == 0 and alive:
-                alive = False
-                death()
+        lives = run("print(mem:read_i8(0x4e14))", True)
 
-        if game == SPACE:
-            lives = run("print(mem:read_i8(0x20ef))", True)
-            if lives == 1:
-                alive = True
-            if lives == 0 and alive:
-                alive = False
-                death()
+        if lives == 3:
+            alive = True
+        if lives == 0 and alive:
+            alive = False
+            death()
 
-        sleep(.5)
+        sleep(1)
