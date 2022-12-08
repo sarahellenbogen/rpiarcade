@@ -26,7 +26,7 @@ SPACE = 2
 def display(char):
     global process
     buffer = process.stdout.read1(char).decode("utf-8")
-    # print(buffer, end="", flush=True)
+    print(buffer, end="", flush=True)
     return buffer
 
 def search_for_output(string):
@@ -36,15 +36,22 @@ def search_for_output(string):
         buffer = buffer + display(1)
     display(-1)
 
-def run(command, resp):
+def runraw(command, resp):
     global process
     process.stdin.write(bytes(command + "\n", 'utf-8'))
-    # print(command)
+    print(command)
     process.stdin.flush()
     sleep(.16)
     string = display(-1)
     if resp:
-        return int(string.split('\n')[0])
+        return string.split('\n')[0]
+
+def run(command, resp):
+    if resp:
+        return int(runraw(command, resp))
+    else:
+        runraw(command, resp)
+        
 
 def death():
     global game
@@ -54,38 +61,41 @@ def death():
     score = 0
 
     if game == PACMAN:
-        temp = run("print(mem:read_i8(0xee83))", True)
+        temp = run("print(mem:read_u8(0xee83))", True)
         score *= 100
         score += (temp >> 4) * 10
         score += temp & 0xF
-        temp = run("print(mem:read_i8(0xee82))", True)
+        temp = run("print(mem:read_u8(0xee82))", True)
         score *= 100
-        score += (temp >> 4) * 10
-        score += temp & 0xF
-        sleep(0.16)
-        score *= 100
-        temp = run("print(mem:read_i8(0xee81))", True)
         score += (temp >> 4) * 10
         score += temp & 0xF
         sleep(0.16)
         score *= 100
-        temp = run("print(mem:read_i8(0xee80))", True)
+        temp = run("print(mem:read_u8(0xee81))", True)
+        score += (temp >> 4) * 10
+        score += temp & 0xF
+        sleep(0.16)
+        score *= 100
+        temp = run("print(mem:read_u8(0xee80))", True)
         score += (temp >> 4) * 10
         score += temp & 0xF
 
+        score /= 10
+        score = int(score)
+
     if game == SPACE:
-        temp = run("print(mem:read_i8(0x20f8))", True)
+        temp = run("print(mem:read_u8(0x20f8))", True)
         score *= 100
         score += (temp >> 4) * 10
         score += temp & 0xF
         sleep(0.16)
         score *= 100
-        temp = run("print(mem:read_i8(0x20f7))", True)
+        temp = run("print(mem:read_u8(0x20f7))", True)
         score += (temp >> 4) * 10
         score += temp & 0xF
         sleep(0.16)
         score *= 100
-        temp = run("print(mem:read_i8(0x20f6))", True)
+        temp = run("print(mem:read_u8(0x20f6))", True)
         score += (temp >> 4) * 10
         score += temp & 0xF
 
@@ -100,7 +110,7 @@ def death():
         while not authenticated:
             while uid is None:
                 # display message
-                run("manager.machine:popmessage('tap card to collect tickets')", False)
+                run("manager.machine:popmessage('tap card to collect your " + str(score) + " tickets')", False)
                 # Check if a card is available to read
                 uid = pn532.read_passive_target(timeout=2)
 
@@ -133,23 +143,36 @@ with subprocess.Popen(
     stdin=subprocess.PIPE,
     stdout=subprocess.PIPE,
 ) as process:
-    sleep(5)
+    sleep(1)
     display(-1)
-    run("cpu = manager.machine.devices[':maincpu']", False)
-    sleep(1)
-    run("mem = cpu.spaces['program']", False)
-    sleep(1)
-    run("s = manager.machine.screens[':screen']", False)
-    sleep(1)
-    
+
     while(True):
-        rom = run("print(emu.romname())", True)
-        if rom == pacman:
+        rom = runraw("print(emu.romname())", True)
+        if rom == "pacman":
+            if game != PACMAN:
+                sleep(10)
+                run("cpu = manager.machine.devices[':maincpu']", False)
+                sleep(1)
+                run("mem = cpu.spaces['program']", False)
+                sleep(1)
+                run("s = manager.machine.screens[':screen']", False)
+
             game = PACMAN
-        elif rom == invaderl:
+            # print(game)
+        elif rom == "invaderl":
+            if game != SPACE:
+                sleep(10)
+                run("cpu = manager.machine.devices[':maincpu']", False)
+                sleep(1)
+                run("mem = cpu.spaces['program']", False)
+                sleep(1)
+                run("s = manager.machine.screens[':screen']", False)
+                
             game = SPACE
+            # print(game)
         else:
             game = NOTHING
+            # print(game)
         
         if game == PACMAN:
             lives = run("print(mem:read_i8(0x4e14))", True)
