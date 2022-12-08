@@ -22,11 +22,12 @@ pn532.SAM_configuration()
 NOTHING = 0
 PACMAN = 1
 SPACE = 2
+GALA = 3
 
 def display(char):
     global process
     buffer = process.stdout.read1(char).decode("utf-8")
-    print(buffer, end="", flush=True)
+    # print(buffer, end="", flush=True)
     return buffer
 
 def search_for_output(string):
@@ -39,7 +40,7 @@ def search_for_output(string):
 def runraw(command, resp):
     global process
     process.stdin.write(bytes(command + "\n", 'utf-8'))
-    print(command)
+    # print(command)
     process.stdin.flush()
     sleep(.16)
     string = display(-1)
@@ -99,8 +100,56 @@ def death():
         score += (temp >> 4) * 10
         score += temp & 0xF
 
+    if game == GALA:
+        score *= 10
+        temp = run("print(mem:read_u8(0x83FF))", True)
+        if temp != 36:
+            score += temp
+        sleep(0.16)
+        
+        score *= 10
+        temp = run("print(mem:read_u8(0x83FE))", True)
+        if temp != 36:
+            score += temp
+        sleep(0.16)
 
-    print("score: " + str(score))
+        score *= 10
+        temp = run("print(mem:read_u8(0x83FD))", True)
+        if temp != 36:
+            score += temp
+        sleep(0.16)
+
+        score *= 10
+        temp = run("print(mem:read_u8(0x83FC))", True)
+        if temp != 36:
+            score += temp
+        sleep(0.16)
+
+        score *= 10
+        temp = run("print(mem:read_u8(0x83FB))", True)
+        if temp != 36:
+            score += temp
+        sleep(0.16)
+
+        score *= 10
+        temp = run("print(mem:read_u8(0x83FA))", True)
+        if temp != 36:
+            score += temp
+        sleep(0.16)
+
+        score *= 10
+        temp = run("print(mem:read_u8(0x83F9))", True)
+        if temp != 36:
+            score += temp
+        sleep(0.16)
+
+        score *= 10
+        temp = run("print(mem:read_u8(0x83F8))", True)
+        if temp != 36:
+            score += temp
+        sleep(0.16)
+
+    # print("score: " + str(score))
 
     key = b"\xFF\xFF\xFF\xFF\xFF\xFF"
     uid = None
@@ -156,9 +205,7 @@ with subprocess.Popen(
                 run("mem = cpu.spaces['program']", False)
                 sleep(1)
                 run("s = manager.machine.screens[':screen']", False)
-
-            game = PACMAN
-            # print(game)
+                game = PACMAN
         elif rom == "invaderl":
             if game != SPACE:
                 sleep(10)
@@ -167,15 +214,21 @@ with subprocess.Popen(
                 run("mem = cpu.spaces['program']", False)
                 sleep(1)
                 run("s = manager.machine.screens[':screen']", False)
-                
-            game = SPACE
-            # print(game)
+                game = SPACE
+        elif rom == "galagao":
+            if game != GALA:
+                sleep(10)
+                run("cpu = manager.machine.devices[':maincpu']", False)
+                sleep(1)
+                run("mem = cpu.spaces['program']", False)
+                sleep(1)
+                run("s = manager.machine.screens[':screen']", False)
+                game = GALA
         else:
             game = NOTHING
-            # print(game)
         
         if game == PACMAN:
-            lives = run("print(mem:read_i8(0x4e14))", True)
+            lives = run("print(mem:read_u8(0x4e14))", True)
             if lives == 3:
                 alive = True
             if lives == 0 and alive:
@@ -183,10 +236,18 @@ with subprocess.Popen(
                 death()
 
         if game == SPACE:
-            lives = run("print(mem:read_i8(0x20ef))", True)
+            lives = run("print(mem:read_u8(0x20ef))", True)
             if lives == 1:
                 alive = True
             if lives == 0 and alive:
+                alive = False
+                death()
+        
+        if game == GALA:
+            lives = run("print(mem:read_u8(0x9820))", True)
+            if lives == 2:
+                alive = True
+            if lives == 255 and alive:
                 alive = False
                 death()
 
