@@ -156,7 +156,7 @@ def death():
     authenticated = False
     check = False
     while not check:
-        while not authenticated:
+        try:
             while uid is None:
                 # display message
                 run("manager.machine:popmessage('tap card to collect your " + str(score) + " tickets')", False)
@@ -168,16 +168,21 @@ def death():
                 run("manager.machine:popmessage('tap card again')", False)
                 uid = None
             
-        # read points on card
-        cardpoints = int.from_bytes(pn532.mifare_classic_read_block(4), "big")
-        
-        # write new points to card
-        newpoints = score + cardpoints
-        data = newpoints.to_bytes(16, 'big')
-        pn532.mifare_classic_write_block(4, data)
+            # read points on card
+            cardpoints = int.from_bytes(pn532.mifare_classic_read_block(4), "big")
+            # write new points to card
+            newpoints = score + cardpoints
+            data = newpoints.to_bytes(16, 'big')
+            pn532.mifare_classic_write_block(4, data)
+            # confirm points from card
+            check = int.from_bytes(pn532.mifare_classic_read_block(4), "big") == newpoints
 
-        # read points from card
-        check = int.from_bytes(pn532.mifare_classic_read_block(4), "big") == newpoints
+        except:
+            authenticated = False
+            uid = None
+            check = False
+            run("Try scanning again", False)
+
 
     run("manager.machine:popmessage('you had " + str(cardpoints) + " tickets you now have " + str(newpoints) + " tickets!')", False)
 
@@ -199,6 +204,7 @@ with subprocess.Popen(
         rom = runraw("print(emu.romname())", True)
         if rom == "pacman":
             if game != PACMAN:
+                alive = False
                 sleep(10)
                 run("cpu = manager.machine.devices[':maincpu']", False)
                 sleep(1)
@@ -208,6 +214,7 @@ with subprocess.Popen(
                 game = PACMAN
         elif rom == "invaderl":
             if game != SPACE:
+                alive = False
                 sleep(10)
                 run("cpu = manager.machine.devices[':maincpu']", False)
                 sleep(1)
@@ -217,6 +224,7 @@ with subprocess.Popen(
                 game = SPACE
         elif rom == "galagao":
             if game != GALA:
+                alive = False
                 sleep(10)
                 run("cpu = manager.machine.devices[':maincpu']", False)
                 sleep(1)
