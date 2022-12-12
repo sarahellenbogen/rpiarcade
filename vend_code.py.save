@@ -1,4 +1,3 @@
-# code for vending machine operation
 import pygame     # Import pygame graphics library
 from pygame.locals import *
 import RPi.GPIO as GPIO
@@ -24,7 +23,7 @@ cost = [2000,5000,10000000,800]
 unstall = True
 spintime = .9
 A1pwr = 20
-A2pwr = 9
+A2pwr = 10
 B1pwr = 7
 B2pwr = 10
 
@@ -241,7 +240,7 @@ while (True):
             A1(A1pwr)
         elif item == 2:
             if unstall:
-                A2(70)
+                A2(100)
                 time.sleep(.05)
             A2(A2pwr)
         elif item == 3:
