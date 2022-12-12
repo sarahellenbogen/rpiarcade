@@ -1,8 +1,6 @@
-# Example of detecting and reading a block from a MiFare classic NFC card.
-# This connecting to the PN532 and writing & reading a classic type RFID tag
-
 import board
 import busio
+import sys
 
 # Additional import needed for SPI
 from digitalio import DigitalInOut
@@ -31,6 +29,10 @@ if not authenticated:
     print("Authentication failed!")
 
 value = 0
+try:
+    value = int(sys.argv[1])
+except:
+    pass
 data = value.to_bytes(16, 'big')
 pn532.mifare_classic_write_block(4, data)
 

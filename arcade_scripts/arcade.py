@@ -27,7 +27,7 @@ GALA = 3
 def display(char):
     global process
     buffer = process.stdout.read1(char).decode("utf-8")
-    # print(buffer, end="", flush=True)
+    print(buffer, end="", flush=True)
     return buffer
 
 def search_for_output(string):
@@ -40,7 +40,7 @@ def search_for_output(string):
 def runraw(command, resp):
     global process
     process.stdin.write(bytes(command + "\n", 'utf-8'))
-    # print(command)
+    print(command)
     process.stdin.flush()
     sleep(.16)
     string = display(-1)
@@ -49,7 +49,10 @@ def runraw(command, resp):
 
 def run(command, resp):
     if resp:
-        return int(runraw(command, resp))
+        try:
+            return int(runraw(command, resp))
+        except:
+            return 0 
     else:
         runraw(command, resp)
         
@@ -149,7 +152,7 @@ def death():
             score += temp
         sleep(0.16)
 
-    # print("score: " + str(score))
+    print("score: " + str(score))
 
     key = b"\xFF\xFF\xFF\xFF\xFF\xFF"
     uid = None
