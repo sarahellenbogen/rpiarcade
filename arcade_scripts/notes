@@ -9,10 +9,4 @@ print(mem:read_i8(0x4e14))
 
 subprocess - https://realpython.com/python-subprocess/
 
-game running in space invaders
-20ef
-
-points in space invaders
-20f6
-
 https://github.com/mamedev/mame/blob/master/src/frontend/mame/luaengine.cpp
