@@ -1,4 +1,3 @@
-
 import pygame     # Import pygame graphics library
 from pygame.locals import *
 import RPi.GPIO as GPIO
@@ -13,14 +12,20 @@ import busio
 
 # Additional import needed for I2C/SPI
 from digitalio import DigitalInOut
-#
-# NOTE: pick the import that matches the interface being used
-#
 from adafruit_pn532.adafruit_pn532 import MIFARE_CMD_AUTH_B
-#from adafruit_pn532.i2c import PN532_I2C
 
 from adafruit_pn532.spi import PN532_SPI
-# from adafruit_pn532.uart import PN532_UART
+
+# costs of items
+cost = [2000,5000,10000000,800]
+
+# motor config
+unstall = True
+spintime = .9
+A1pwr = 20
+A2pwr = 9
+B1pwr = 7
+B2pwr = 10
 
 # SPI connection:
 spi = busio.SPI(board.SCK_1, MOSI = board.MOSI_1, MISO =  board.MISO_1)
@@ -47,7 +52,8 @@ GPIO.setup(DIRB1, GPIO.OUT) # DIRA2
 GPIO.setup(DIRA2, GPIO.OUT) # DIRB1
 GPIO.setup(DIRB2, GPIO.OUT) # DIRB2
 GPIO.setup(PWM,  GPIO.OUT) # PWMA
-PWM = GPIO.PWM(PWM, 100)
+PWM = GPIO.PWM(PWM, 1000)
+
 
 def A1_stop():   # Item A1 stop
     GPIO.output(DIRA1, GPIO.LOW)
@@ -78,10 +84,10 @@ def A2(pwr):   # A2 Dispense
 def B2(pwr):   # B2 Dispense
     GPIO.output(DIRB2, GPIO.HIGH)
     PWM.start(pwr)
- 
-os.putenv('SDL_VIDEODRIVER', 'fbcon') # Display on piTFT 
+
+os.putenv('SDL_VIDEODRIVER', 'fbcon') # Display on piTFT
 os.putenv('SDL_FBDEV', '/dev/fb1') #
-os.putenv('SDL_MOUSEDRV', 'TSLIB') # Track mouse clicks on piTFT 
+os.putenv('SDL_MOUSEDRV', 'TSLIB') # Track mouse clicks on piTFT
 os.putenv('SDL_MOUSEDEV', '/dev/input/touchscreen')
 
 # TFT buttons
@@ -127,11 +133,10 @@ message = "Scan card or pick item"
 ticketStr = "No card scanned"
 popUp = " "
 item = 0
-cost = [10,10,10,10]
 canSelect = 1
 clock = pygame.time.Clock()
 end_time = time.time() + 120
-while (time.time() < end_time):
+while (True):
 
     screen.fill(white)               # Erase the Work space
     for i in range(len(rects)):
@@ -165,10 +170,14 @@ while (time.time() < end_time):
         # Check if a card is available to read
         uid = pn532.read_passive_target(timeout=1)
         if uid is not None:
-            authenticated = pn532.mifare_classic_authenticate_block(uid, 4, MIFARE_CMD_AUTH_B, key)
-            tickets = int.from_bytes(pn532.mifare_classic_read_block(4), "big")
-            state = 1
-            state1start = time.time()
+            try:
+                authenticated = pn532.mifare_classic_authenticate_block(uid, 4, MIFARE_CMD_AUTH_B, key)
+                tickets = int.from_bytes(pn532.mifare_classic_read_block(4), "big")
+                state = 1
+                state1start = time.time()
+            except:
+                uid = None
+                print("except")
 
     elif state == 1:
         popUp = " "
@@ -177,10 +186,14 @@ while (time.time() < end_time):
         if time.time() > (state1start + 5):
             uid = pn532.read_passive_target(timeout=1)
             if uid is not None:
-                authenticated = pn532.mifare_classic_authenticate_block(uid, 4, MIFARE_CMD_AUTH_B, key)
-                tickets = int.from_bytes(pn532.mifare_classic_read_block(4), "big")
-                state = 1
-                state1start = time.time()
+                try:
+                    authenticated = pn532.mifare_classic_authenticate_block(uid, 4, MIFARE_CMD_AUTH_B, key)
+                    tickets = int.from_bytes(pn532.mifare_classic_read_block(4), "big")
+                    state = 1
+                    state1start = time.time()
+                except:
+                    uid = None
+                    print("exception")
         if (time.time() >= state1start + 20):
             state = 0
 
@@ -191,18 +204,22 @@ while (time.time() < end_time):
             state = 0
         uid = pn532.read_passive_target(timeout=1)
         if uid is not None:
-            authenticated = pn532.mifare_classic_authenticate_block(uid, 4, MIFARE_CMD_AUTH_B, key)
-            vend_tickets = int.from_bytes(pn532.mifare_classic_read_block(4), "big")
-            new_val = vend_tickets - cost[item-1]
-            if new_val >= 0:
-                data = new_val.to_bytes(16, 'big')
-                pn532.mifare_classic_write_block(4, data)
-                ticketStr = "You now have " + str(new_val) + " tickets"
-                state = 4
-                state3start = time.time() 
-            else:
-                state = 3
-                state3start = time.time()
+            try:
+                authenticated = pn532.mifare_classic_authenticate_block(uid, 4, MIFARE_CMD_AUTH_B, key)
+                vend_tickets = int.from_bytes(pn532.mifare_classic_read_block(4), "big")
+                new_val = vend_tickets - cost[item-1]
+                if new_val >= 0:
+                    data = new_val.to_bytes(16, 'big')
+                    pn532.mifare_classic_write_block(4, data)
+                    ticketStr = "You now have " + str(new_val) + " tickets"
+                    state = 4
+                    state4start = time.time() 
+                else:
+                    state = 3
+                    state3start = time.time()
+            except:
+                uid = None
+                print("exception")
 
     elif state == 3:
         popUp = " "
@@ -214,16 +231,28 @@ while (time.time() < end_time):
     elif state == 4:
         popUp = "VENDING"
         canSelect = 0
-        if (time.time() >= state3start + 5):
+        if (time.time() >= state4start + spintime):
             state = 0
         if item == 1:
-            A1(50)
+            if unstall:
+                A1(100)
+                time.sleep(.05)
+            A1(A1pwr)
         elif item == 2:
-            A2(50)
+            if unstall:
+                A2(70)
+                time.sleep(.05)
+            A2(A2pwr)
         elif item == 3:
-            B1(50)
+            if unstall:
+                B1(100)
+                time.sleep(.05)
+            B1(B1pwr)
         elif item == 4:
-            B2(50)
+            if unstall:
+                B2(70)
+                time.sleep(.05)
+            B2(B2pwr)
 
     if canSelect == 1:
 
@@ -272,22 +301,22 @@ while (time.time() < end_time):
                 elif x >= 10 and x <= 75 and y >= 0 and y <= 30:
                     if code[0] == "A":
                         if code[1] == "1":
-                            message = "This prize is 10 tickets"
+                            message = "This prize is " + str(cost[0]) + " tickets"
                             state = 2
                             item = 1
                         if code[1] == "2":
-                            message = "This prize is 10 tickets"
+                            message = "This prize is " + str(cost[1]) + " tickets"
                             state = 2
                             item = 2
 
                     if code[0] == "B":
                         if code[1] == "1":
-                            message = "This prize is 10 tickets"
+                            message = "This prize is " + str(cost[2]) + " tickets"
                             state = 2
                             item = 3
                         if code[1] == "2":
-                            message = "This prize is 10 tickets"
-                            state == 2
+                            message = "This prize is " + str(cost[3]) + " tickets"
+                            state = 2
                             item = 4
 
                     if state != 2:
